@@ -11,7 +11,10 @@ import arcpy
 
 
 # Local variables:
-arcpy.env.workspace = "C:\\Users\\f_erdm02\\Desktop\\EoTData\\EoTData\\smartphone_data"
+arcpy.env.workspace = arcpy.env.scratchFolder
+points = arcpy.GetParameterAsText(0)
+points_statistics = "points_statistics.dbf"
+pointsNew = "points_new.shp"
 
 mean = 0
 std = 0
@@ -19,10 +22,6 @@ threshold = 0
 
 # overwriting output
 arcpy.env.overwriteOutput = True
-
-points = arcpy.GetParameterAsText(0)
-points_statistics = "points_statistics.dbf"
-pointsNew = "points_new.shp"
 
 arcpy.Copy_management(points, pointsNew)
 
@@ -58,7 +57,7 @@ with arcpy.da.UpdateCursor(pointsNew, "accuracy") as cursor:
 mxd = arcpy.mapping.MapDocument("CURRENT")
 df = arcpy.mapping.ListDataFrames(mxd, "*")[0]
 newLayer = arcpy.mapping.Layer(pointsNew)
-arcpy.mapping.AddLayer(df, newLayer, "BOTTOM")
+arcpy.mapping.AddLayer(df, newLayer, "TOP")
 
 
 print "FERTIG"
