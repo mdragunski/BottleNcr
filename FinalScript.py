@@ -2,9 +2,7 @@ import arcpy
 from math import sin, cos, sqrt, atan2, radians
 from datetime import datetime
 
-arcpy.env.workspace = "C:/Users/n_stef05/Desktop/EoT Data/EoT Data/smartphone_data"
-
-points = "tp1_17-17-11_nach-abpfiff.shp"
+arcpy.env.workspace = arcpy.env.scratchFolder
 
 
 # locs consist of val tuples
@@ -32,57 +30,59 @@ def getSpeed(loc1, loc2, dist):
         speed = 0
     #print "{} km/h".format(speed)
     return speed
-    
 
-# Get current values from shp and pollute vals variable
-rows = arcpy.SearchCursor(points)
-cursor = arcpy.SearchCursor(points)
-vals = [] # will contain objects with lat, lon, date, speed attributes
-for row in rows:   
-    ro = cursor.next()
-    lat = ro.getValue("lat")
-    lon = ro.getValue("lon")
-    date = ro.getValue("date")
-    speed = None
-    vals.append({"lat": lat, "lon": lon, "date": date, "speed": speed})
+def calculateSpeed(points):
+    # Get current values from shp and pollute vals variable
+    rows = arcpy.SearchCursor(points)
+    cursor = arcpy.SearchCursor(points)
+    vals = [] # will contain objects with lat, lon, date, speed attributes
+    for row in rows:   
+        ro = cursor.next()
+        lat = ro.getValue("lat")
+        lon = ro.getValue("lon")
+        date = ro.getValue("date")
+        speed = None
+        vals.append({"lat": lat, "lon": lon, "date": date, "speed": speed})
 
-del rows
-del row
-del cursor
-
-
-
-#calculate distances and speed. Set result to attribute speed of each value
-for i, val in enumerate(vals):
-    if(i < len(vals)-1):
-        dist = getDist(val, vals[i+1])
-        val["speed"] = getSpeed(val, vals[i+1], dist)
-
-arcpy.AddField_management(points, "bttlNcr", "FLOAT")
-
-#update values
-updatecursor = arcpy.UpdateCursor(points)
-index = 0
-for row in updatecursor:
-    if(index < len(vals)-1):
-        row.bttlNcr = long(vals[index]["speed"])
-        #print vals[index]
-    index += 1
-    updatecursor.updateRow(row)
-
-del row
-del updatecursor
+    del rows
+    del row
+    del cursor
 
 
-# just for checking if values have been updated
-cursor = arcpy.SearchCursor(points)
-for row in cursor:
-    ro = cursor.next()
-    #print ro.getValue("FID")
-    #print ro.getValue("speed")
 
-del cursor
-del row
+    #calculate distances and speed. Set result to attribute speed of each value
+    for i, val in enumerate(vals):
+        if(i < len(vals)-1):
+            dist = getDist(val, vals[i+1])
+            val["speed"] = getSpeed(val, vals[i+1], dist)
 
-    
+    arcpy.AddField_management(points, "bttlNcr", "FLOAT")
+
+    #update values
+    updatecursor = arcpy.UpdateCursor(points)
+    index = 0
+    for row in updatecursor:
+        if(index < len(vals)-1):
+            row.bttlNcr = long(vals[index]["speed"])
+            #print vals[index]
+        index += 1
+        updatecursor.updateRow(row)
+
+    del row
+    del updatecursor
+
+
+    # just for checking if values have been updated
+    cursor = arcpy.SearchCursor(points)
+    for row in cursor:
+        ro = cursor.next()
+        #print ro.getValue("FID")
+        #print ro.getValue("speed")
+
+    del cursor
+    del row
+
+    return points
+
+        
 
