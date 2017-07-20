@@ -8,6 +8,8 @@
 
 # Import arcpy module
 import arcpy
+import matplotlib.pyplot as plt
+
 
 
 # Local variables:
@@ -19,6 +21,9 @@ pointsNew = "points_new.shp"
 mean = 0
 std = 0
 threshold = 0
+
+fig, ax = plt.subplots()
+
 
 # overwriting output
 arcpy.env.overwriteOutput = True
@@ -57,7 +62,7 @@ with arcpy.da.UpdateCursor(pointsNew, "accuracy") as cursor:
 mxd = arcpy.mapping.MapDocument("CURRENT")
 df = arcpy.mapping.ListDataFrames(mxd, "*")[0]
 newLayer = arcpy.mapping.Layer(pointsNew)
+
+arcpy.ApplySymbologyFromLayer_management(newLayer, "points_new_style.lyr")
+
 arcpy.mapping.AddLayer(df, newLayer, "TOP")
-
-
-print "FERTIG"
