@@ -11,6 +11,7 @@ columns = arcpy.ListFields(points)
 
 # locs consist of val tuples
 # returns distance in km
+# shamelessly taken from: https://stackoverflow.com/a/19412565
 def getDist(loc1, loc2):
     R = 6373.0
     d_lon = radians(loc2["lon"]) - radians(loc1["lon"])
