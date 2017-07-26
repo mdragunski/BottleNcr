@@ -27,4 +27,4 @@ def init(input_shp):
     densityLayer = arcpy.mapping.Layer('density.tif')
 
     arcpy.ApplySymbologyFromLayer_management(densityLayer, "density_style.lyr")
-    arcpy.mapping.AddLayer(df, densityLayer, "TOP")
+    arcpy.mapping.AddLayer(df, densityLayer, "BOTTOM")

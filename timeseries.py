@@ -12,7 +12,7 @@ speed_data = []
 accuracy_data = []
 time_data = []
 
-def init(input_shp, outputFolder):
+def init(input_shp, outputFolder, fn):
 
     searchCursor = arcpy.SearchCursor(input_shp)
 
@@ -24,12 +24,12 @@ def init(input_shp, outputFolder):
         time_data.append(date)
     del searchCursor
 
-    displaySpeedPlot(outputFolder)
-    displayAccuracyPlot(outputFolder)
-    displaySpeedHist(outputFolder)
+    displaySpeedPlot(outputFolder, fn)
+    displayAccuracyPlot(outputFolder, fn)
+    displaySpeedHist(outputFolder, fn)
 
 
-def displaySpeedPlot(outputFolder):
+def displaySpeedPlot(outputFolder, fn):
     fig, ax1 = plt.subplots(nrows = 1, sharex = True)
 
     mean = np.mean(speed_data)
@@ -57,11 +57,11 @@ def displaySpeedPlot(outputFolder):
     plt.legend(handles=[speedPatch,averagePatch])
 
     #save as png
-    imageOut = outputFolder + os.sep + "speed.png"
+    imageOut = outputFolder + os.sep + fn + "_bttlNcr_speed.png"
     fig.savefig(imageOut, dpi=fig.dpi)
 
 
-def displayAccuracyPlot(outputFolder):
+def displayAccuracyPlot(outputFolder, fn):
     fig, ax1 = plt.subplots(nrows = 1, sharex = True)
 
     mean = np.mean(accuracy_data)
@@ -75,9 +75,9 @@ def displayAccuracyPlot(outputFolder):
     ax1.plot(time_data, mean_data, 'b-')
 
     # Titles
-    fig.suptitle("Speed over Time")
+    fig.suptitle("Accuracy over Time")
     ax1.set_xlabel("t")
-    ax1.set_ylabel("km / h")
+    ax1.set_ylabel("Accuracy in m")
 
     # Legend
     accuracyPatch = mpatches.Patch(color='red', label="Accuracy in meters")
@@ -86,19 +86,26 @@ def displayAccuracyPlot(outputFolder):
     plt.legend(handles=[accuracyPatch,averagePatch])
 
     #save as png
-    imageOut = outputFolder + os.sep + "accuracy.png"
+    imageOut = outputFolder + os.sep + fn + "_bttlNcr_accuracy.png"
     fig.savefig(imageOut, dpi=fig.dpi)
 
 
-def displaySpeedHist(outputFolder):
+def displaySpeedHist(outputFolder, fn):
 
     fig = plt.figure()
-    plt.hist(speed_data)
+
+    # Support for dynamic histogram bin size has been added in
+    # numpy v. 1.11.0
+    if np.version.version < '1.11.0':
+        plt.hist(speed_data, bins=5)
+        arcpy.AddMessage('###UPDATE NUMPY TO GET BETTER RESULTS###')
+    else:
+        plt.hist(speed_data)
 
     plt.xlabel('Speed Values')
     plt.ylabel('Frequency')
 
     plt.title('Frequency of Speed Values')
 
-    imageOut = outputFolder + os.sep + "hist.png"
+    imageOut = outputFolder + os.sep + fn + "_bttlNcr_hist.png"
     fig.savefig(imageOut, dpi=fig.dpi)
