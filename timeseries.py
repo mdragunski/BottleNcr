@@ -100,7 +100,7 @@ def displaySpeedHist(outputFolder, fn):
         plt.hist(speed_data, bins=5)
         arcpy.AddMessage('###UPDATE NUMPY TO GET BETTER RESULTS###')
     else:
-        plt.hist(speed_data)
+        plt.hist(speed_data, bins='auto')
 
     plt.xlabel('Speed Values')
     plt.ylabel('Frequency')
