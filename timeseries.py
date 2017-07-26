@@ -12,8 +12,7 @@ speed_data = []
 accuracy_data = []
 time_data = []
 
-
-def init(input_shp):
+def init(input_shp, outputFolder):
 
     searchCursor = arcpy.SearchCursor(input_shp)
 
@@ -25,12 +24,12 @@ def init(input_shp):
         time_data.append(date)
     del searchCursor
 
-    displaySpeedPlot()
-    displayAccuracyPlot()
-    displaySpeedHist()
+    displaySpeedPlot(outputFolder)
+    displayAccuracyPlot(outputFolder)
+    displaySpeedHist(outputFolder)
 
 
-def displaySpeedPlot():
+def displaySpeedPlot(outputFolder):
     fig, ax1 = plt.subplots(nrows = 1, sharex = True)
 
     mean = np.mean(speed_data)
@@ -58,11 +57,11 @@ def displaySpeedPlot():
     plt.legend(handles=[speedPatch,averagePatch])
 
     #save as png
-    imageOut = arcpy.env.scratchFolder + os.sep + "speed.png"
+    imageOut = outputFolder + os.sep + "speed.png"
     fig.savefig(imageOut, dpi=fig.dpi)
 
 
-def displayAccuracyPlot():
+def displayAccuracyPlot(outputFolder):
     fig, ax1 = plt.subplots(nrows = 1, sharex = True)
 
     mean = np.mean(accuracy_data)
@@ -87,11 +86,11 @@ def displayAccuracyPlot():
     plt.legend(handles=[accuracyPatch,averagePatch])
 
     #save as png
-    imageOut = arcpy.env.scratchFolder + os.sep + "accuracy.png"
+    imageOut = outputFolder + os.sep + "accuracy.png"
     fig.savefig(imageOut, dpi=fig.dpi)
 
 
-def displaySpeedHist():
+def displaySpeedHist(outputFolder):
 
     fig = plt.figure()
     plt.hist(speed_data)
@@ -101,5 +100,5 @@ def displaySpeedHist():
 
     plt.title('Frequency of Speed Values')
 
-    imageOut = arcpy.env.scratchFolder + os.sep + "hist.png"
+    imageOut = outputFolder + os.sep + "hist.png"
     fig.savefig(imageOut, dpi=fig.dpi)
