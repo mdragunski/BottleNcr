@@ -1,6 +1,7 @@
 import arcpy
 import os
 import numpy as np
+from numpy.lib import NumpyVersion
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import matplotlib.patches as mpatches
@@ -96,8 +97,8 @@ def displaySpeedHist(outputFolder, fn):
 
     # Support for dynamic histogram bin size has been added in
     # numpy v. 1.11.0
-    if np.version.version < '1.11.0':
-        plt.hist(speed_data, bins=5)
+    if NumpyVersion(np.__version__) < '1.11.0':
+        plt.hist(speed_data, bins=max(speed_data))
         arcpy.AddMessage('###UPDATE NUMPY TO GET BETTER RESULTS###')
     else:
         plt.hist(speed_data, bins='auto')
