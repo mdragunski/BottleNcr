@@ -3,9 +3,6 @@
 This tool was built during the study project 'Python in GIS' at [ifgi](https://www.ifgi.de) in the summer term 2017.
 
 ## Getting Started
-
-TODO
-
 ### Prerequisites
 
 * ArcGIS 10.5 or higher
