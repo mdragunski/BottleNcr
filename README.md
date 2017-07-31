@@ -1,6 +1,6 @@
 # BottleNcr
 
-This tool was built during the study project 'Python in GIS' at [ifgi](https://www.ifgi.de) in the summer term 2017.
+This tool was built for the study project 'Python in GIS' at [ifgi](https://www.ifgi.de) during the summer term of 2017.
 
 ## Getting Started
 ### Prerequisites
