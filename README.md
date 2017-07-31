@@ -18,8 +18,9 @@ This tool was built during the study project 'Python in GIS' at [ifgi](https://w
 2.  Create a folder connection to the unzipped files
 3.  Inside of the folder connection, open the Toolbox and start the script `BottleNcr`
 4.  Select your track (as .shp file) in which you want to identify bottlenecks
-5.  Navigate to a folder where you want to store the results
-6.  Now run the script
+5.  [Optional] Specify an accuracy threshold value
+6.  Navigate to a folder where you want to store the results
+7.  Now run the script
 
 ### Results
 You can now see the colored track in ArcMap, where green indicates slow speeds, yellow medium speeds and red high speeds. Furthermore, you can see bottlenecks indicated by blue areas. The darker the blue area the higher the point density.
