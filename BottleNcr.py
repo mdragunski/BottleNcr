@@ -10,6 +10,9 @@ import visualizer
 
 points = arcpy.GetParameterAsText(0)
 outputFolder = arcpy.GetParameterAsText(1)
+accuracyThreshold = arcpy.GetParameter(2)
+
+arcpy.AddMessage(accuracyThreshold)
 #points = "C:\\Users\\nico\\Desktop\\EoTData\\smartphone_data\\tp1_17-17-11_nach-abpfiff.shp"
 #points = "C:\\Users\\n_stef05\\Desktop\\EoTData\\EoTData\\smartphone_data\\tp1_17-17-11_nach-abpfiff.shp"
 
@@ -19,7 +22,7 @@ def getFileName(path):
     return fn
 
 filename = getFileName(points)
-validated_shapefile = validator.validateShapefile(points)
+validated_shapefile = validator.validateShapefile(points, accuracyThreshold)
 points_with_speed = FinalScript.calculateSpeed(validated_shapefile)
 timeseries.init(points_with_speed, outputFolder, filename)
 visualizer.init(points_with_speed)

@@ -22,7 +22,7 @@ threshold = 0
 # overwriting output
 arcpy.env.overwriteOutput = True
 
-def validateShapefile(points):
+def validateShapefile(points, accuracyThreshold):
     arcpy.Copy_management(points, pointsNew)
 
     # generate statistics
@@ -43,14 +43,17 @@ def validateShapefile(points):
         if "STD" in field.name:
             std = field_value
 
-    threshold = mean + std
+    if accuracyThreshold == 0:
+        threshold = mean + std
+    else:
+        threshold = accuracyThreshold
 
     print "using threshold: ", threshold
 
     # deleting rows depending on accuracy
     with arcpy.da.UpdateCursor(pointsNew, "accuracy") as cursor:
         for row in cursor:
-            if row[0] > threshold:
+            if row[0] >= threshold:
                 cursor.deleteRow()
 
     return pointsNew
